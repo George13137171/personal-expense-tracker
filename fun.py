@@ -1,59 +1,59 @@
 from datetime import datetime
 
 def get_current_month():
-    """Επιστρέφει τον τρέχοντα μήνα και έτος (π.χ. '2026-09')."""
+    """Returns the current month and year (e.g., '2026-09')."""
     return datetime.now().strftime("%Y-%m")
 
 def add(data):
-    """Προσθέτει νέο έξοδο στη λίστα δεδομένων."""
-    amount = float(input("Δώσε το ποσό: "))
-    category = input("Δώσε την κατηγορία: ")
+    """Adds a new expense to the data list."""
+    amount = float(input("Enter amount: "))
+    category = input("Enter category: ")
     data["expenses"].append({"amount": amount, "category": category})
-    print("Το έξοδο προστέθηκε επιτυχώς!")
+    print("Expense added successfully!")
 
 def show_expenses(data):
-    """Εμφανίζει τα έξοδα και το σύνολο."""
+    """Displays expenses and the total."""
     expenses = data["expenses"]
     if not expenses:
-        print("Δεν υπάρχουν έξοδα ακόμα για αυτόν τον μήνα.")
+        print("No expenses recorded yet for this month.")
     else:
         total = 0
-        print("\n--- ΛΙΣΤΑ ΕΞΟΔΩΝ ---")
+        print("\n--- EXPENSE LIST ---")
         for exp in expenses:
-            print(f"Ποσό: {exp['amount']}€, Κατηγορία: {exp['category']}")
+            print(f"Amount: {exp['amount']}€, Category: {exp['category']}")
             total += exp["amount"]
         print("-" * 20)
-        print(f"Σύνολο εξόδων: {total}€")
+        print(f"Total expenses: {total}€")
 
 def calculate_total(data):
-    """Υπολογίζει τα συνολικά έξοδα και το υπόλοιπο βάσει του budget."""
+    """Calculates total expenses and remaining balance based on budget."""
     total_expense = sum(exp["amount"] for exp in data["expenses"])
     remaining_budget = data["budget"] - total_expense
     return total_expense, remaining_budget
 
 def update_budget(data):
-    """Αυξάνει τον προϋπολογισμό και δείχνει το νέο πραγματικό υπόλοιπο."""
+    """Increases the budget and shows the new actual balance."""
     current_total_budget = data["budget"]
     total_expenses = sum(exp["amount"] for exp in data["expenses"])
     
-    print(f"\n--- Διαχείριση Προϋπολογισμού ---")
-    print(f"Τρέχων Συνολικός Προϋπολογισμός: {current_total_budget}€")
-    print(f"Συνολικά Έξοδα έως τώρα: {total_expenses}€")
+    print(f"\n--- Budget Management ---")
+    print(f"Current Total Budget: {current_total_budget}€")
+    print(f"Total Expenses So Far: {total_expenses}€")
     
     try:
-        extra_amount = float(input("Βάλτε το ποσό που προστέθηκε (π.χ. μπόνους): "))
+        extra_amount = float(input("Enter the added amount (e.g., bonus): "))
         
         if extra_amount > 0:
             new_total_budget = current_total_budget + extra_amount
             new_remaining = new_total_budget - total_expenses
             
-            data["budget"] = new_total_budget  # Ενημερώνουμε το budget στα δεδομένα
+            data["budget"] = new_total_budget  # Update budget in data
             
-            print(f"\n Επιτυχία ενημέρωσης!")
-            print(f" ➔ Νέος Συνολικός Προϋπολογισμός: {new_total_budget}€")
-            print(f" ➔ Νέο Διαθέσιμο Υπόλοιπο (μετά τα έξοδα): {new_remaining}€")
+            print(f"\n Budget updated successfully!")
+            print(f" ➔ New Total Budget: {new_total_budget}€")
+            print(f" ➔ New Available Balance (after expenses): {new_remaining}€")
         else:
-            print(" Το ποσό πρέπει να είναι μεγαλύτερο από το 0.")
+            print(" The amount must be greater than 0.")
             
     except ValueError:
-        print(" Λάθος εισαγωγή. Παρακαλώ πληκτρολογήστε έναν έγκυρο αριθμό.")
+        print(" Invalid input. Please enter a valid number.")
