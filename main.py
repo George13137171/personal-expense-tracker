@@ -2,51 +2,51 @@
 import json
 from fun import get_current_month, add, show_expenses, calculate_total, update_budget
 
-# --- 1. ΦΟΡΤΩΣΗ ΚΑΙ ΕΛΕΓΧΟΣ ΜΗΝΑ ---
+# --- 1. LOAD AND CHECK MONTH ---
 current_month = get_current_month()
 
 try:
     with open("expenses.json", "r", encoding="utf-8") as file:
         data = json.load(file)
         
-        # Ελέγχουμε αν άλλαξε ο μήνας
+        # Check if the month has changed
         if data.get("month") != current_month:
-            print(f"\n Μπήκαμε σε νέο μήνα ({current_month})!")
-            new_budget = float(input("Δώσε το νέο μηνιαίο προϋπολογισμό σου: "))
+            print(f"\n New month started ({current_month})!")
+            new_budget = float(input("Enter your new monthly budget: "))
             data = {
                 "month": current_month,
                 "budget": new_budget,
                 "expenses": []
             }
         else:
-            print("Τα δεδομένα του τρέχοντος μήνα φορτώθηκαν επιτυχώς.")
+            print("Current month data loaded successfully.")
             
 except FileNotFoundError:
-    # Αν δεν υπάρχει το αρχείο, το δημιουργούμε από την αρχή
-    print("Δεν βρέθηκε προηγούμενο αρχείο.")
-    new_budget = float(input("Δώσε το συνολικό μηνιαίο εισόδημά σου: "))
+    # If the file does not exist, create it from scratch
+    print("Previous file not found.")
+    new_budget = float(input("Enter your total monthly income/budget: "))
     data = {
         "month": current_month,
         "budget": new_budget,
         "expenses": []
     }
 
-# Αποθηκεύουμε αμέσως την κατάσταση στο αρχείο
+# Save state immediately to the file
 with open("expenses.json", "w", encoding="utf-8") as file:
     json.dump(data, file, ensure_ascii=False, indent=4)
 
 
-# --- 2. ΚΥΡΙΩΣ ΠΡΟΓΡΑΜΜΑ (ΜΕΝΟΥ) ---
+# --- 2. MAIN PROGRAM (MENU) ---
 while True:
-    print("\n--- ΕΛΕΓΧΟΣ ΕΞΟΔΩΝ ---")
-    print(f"Μήνας: {data['month']} | Τρέχον Budget: {data['budget']}€")
-    print("1. Προσθήκη νέου εξόδου")
-    print("2. Προβολή όλων των εξόδων & συνόλου")
-    print("3. Υπολογισμός συνόλου εξόδων & υπολοίπου")
-    print("4. Bonus - Αλλαγή προϋπολογισμού")
-    print("5. Έξοδος")
+    print("\n--- EXPENSE TRACKER ---")
+    print(f"Month: {data['month']} | Current Budget: {data['budget']}€")
+    print("1. Add new expense")
+    print("2. View all expenses & total")
+    print("3. Calculate total expenses & remaining balance")
+    print("4. Bonus - Update budget")
+    print("5. Exit")
     
-    choice = input("Επιλέξτε μια επιλογή (1-5): ")
+    choice = input("Choose an option (1-5): ")
 
     if choice == "1":
         add(data)
@@ -58,8 +58,8 @@ while True:
 
     elif choice == "3":
         tot_exp, rem_bud = calculate_total(data)
-        print(f"\nΣυνολικά έξοδα: {tot_exp}€")
-        print(f"Υπόλοιπο προϋπολογισμού: {rem_bud}€")
+        print(f"\nTotal expenses: {tot_exp}€")
+        print(f"Remaining budget: {rem_bud}€")
 
     elif choice == "4":
         update_budget(data)
@@ -67,7 +67,7 @@ while True:
             json.dump(data, file, ensure_ascii=False, indent=4)
           
     elif choice == "5":
-        print("Έξοδος από το πρόγραμμα. Γεια σου!")
+        print("Exiting program. Goodbye!")
         break
     else:
-        print("Μη έγκυρη επιλογή. Διάλεξε από 1 έως 5.")
+        print("Invalid choice. Please choose from 1 to 5.")
