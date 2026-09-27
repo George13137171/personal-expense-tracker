@@ -1,4 +1,8 @@
 from datetime import datetime
+from colorama import init, Fore, Style
+
+# Initialize colorama for cross-platform support
+init(autoreset=True)
 
 def get_current_month():
     """Returns the current month and year (e.g., '2026-09')."""
@@ -9,16 +13,16 @@ def add(data):
     amount = float(input("Enter amount: "))
     category = input("Enter category: ")
     data["expenses"].append({"amount": amount, "category": category})
-    print("Expense added successfully!")
+    print(Fore.GREEN + "Expense added successfully!")
 
 def show_expenses(data):
-    """Displays expenses and the total."""
+    """Displays expenses and total."""
     expenses = data["expenses"]
     if not expenses:
-        print("No expenses recorded yet for this month.")
+        print(Fore.YELLOW + "No expenses recorded yet for this month.")
     else:
         total = 0
-        print("\n--- EXPENSE LIST ---")
+        print(Fore.CYAN + "\n--- EXPENSE LIST ---")
         for exp in expenses:
             print(f"Amount: {exp['amount']}€, Category: {exp['category']}")
             total += exp["amount"]
@@ -32,13 +36,13 @@ def calculate_total(data):
     return total_expense, remaining_budget
 
 def update_budget(data):
-    """Increases the budget and shows the new actual balance."""
+    """Increases the budget and shows the new actual remaining balance."""
     current_total_budget = data["budget"]
     total_expenses = sum(exp["amount"] for exp in data["expenses"])
     
-    print(f"\n--- Budget Management ---")
+    print(f"\n{Fore.CYAN}--- Budget Management ---")
     print(f"Current Total Budget: {current_total_budget}€")
-    print(f"Total Expenses So Far: {total_expenses}€")
+    print(f"Total Expenses so far: {total_expenses}€")
     
     try:
         extra_amount = float(input("Enter the added amount (e.g., bonus): "))
@@ -47,13 +51,48 @@ def update_budget(data):
             new_total_budget = current_total_budget + extra_amount
             new_remaining = new_total_budget - total_expenses
             
-            data["budget"] = new_total_budget  # Update budget in data
+            data["budget"] = new_total_budget  # Update budget in data structure
             
-            print(f"\n Budget updated successfully!")
+            print(Fore.GREEN + "\n Update successful!")
             print(f" ➔ New Total Budget: {new_total_budget}€")
-            print(f" ➔ New Available Balance (after expenses): {new_remaining}€")
+            print(f" ➔ New Remaining Balance (after expenses): {new_remaining}€")
         else:
-            print(" The amount must be greater than 0.")
+            print(Fore.RED + " The amount must be greater than 0.")
             
     except ValueError:
-        print(" Invalid input. Please enter a valid number.")
+        print(Fore.RED + " Invalid input. Please type a valid number.")
+
+def show_categories_percentage(data):
+    """Calculates percentages per category and displays colored bars."""
+    expenses = data["expenses"]
+    if not expenses:
+        print(Fore.YELLOW + "No expenses recorded yet to calculate percentages.")
+        return
+
+    category_totals = {}
+    grand_total = 0
+
+    for exp in expenses:
+        cat = exp["category"]
+        amount = exp["amount"]
+        grand_total += amount
+        category_totals[cat] = category_totals.get(cat, 0) + amount
+
+    print(Fore.CYAN + "\n--- CATEGORY & PERCENTAGE ANALYSIS ---")
+    
+    colors = [Fore.GREEN, Fore.BLUE, Fore.MAGENTA, Fore.YELLOW, Fore.RED]
+    i = 0
+    
+    for cat, total in category_totals.items():
+        percentage = (total / grand_total) * 100
+        color = colors[i % len(colors)]
+        
+        # Create a visual progress bar (1 character '█' per 5%)
+        bar_length = int(percentage / 5)
+        bar = "█" * bar_length
+        
+        print(f"{color}{cat}: {total}€ ({percentage:.1f}%)")
+        print(f"{color}{bar}")
+        i += 1
+        
+    print(Style.RESET_ALL + f"\nTotal expenses so far: {grand_total}€")
