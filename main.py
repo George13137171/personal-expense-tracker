@@ -1,8 +1,16 @@
-# Personal Expense Tracker
+# Personal Expense Tracker - Main File
 import json
-from fun import get_current_month, add, show_expenses, calculate_total, update_budget
+from fun import (
+    get_current_month, 
+    add, 
+    show_expenses, 
+    calculate_total, 
+    update_budget, 
+    show_categories_percentage
+)
+from colorama import Fore, Style
 
-# --- 1. LOAD AND CHECK MONTH ---
+# --- 1. LOAD AND MONTH CHECK ---
 current_month = get_current_month()
 
 try:
@@ -11,7 +19,7 @@ try:
         
         # Check if the month has changed
         if data.get("month") != current_month:
-            print(f"\n New month started ({current_month})!")
+            print(Fore.YELLOW + f"\n New month detected ({current_month})!")
             new_budget = float(input("Enter your new monthly budget: "))
             data = {
                 "month": current_month,
@@ -19,11 +27,11 @@ try:
                 "expenses": []
             }
         else:
-            print("Current month data loaded successfully.")
+            print(Fore.GREEN + "Current month data loaded successfully.")
             
 except FileNotFoundError:
-    # If the file does not exist, create it from scratch
-    print("Previous file not found.")
+    # If the file doesn't exist, create it from scratch
+    print(Fore.YELLOW + "Previous file not found.")
     new_budget = float(input("Enter your total monthly income/budget: "))
     data = {
         "month": current_month,
@@ -31,22 +39,23 @@ except FileNotFoundError:
         "expenses": []
     }
 
-# Save state immediately to the file
+# Save the current state immediately to the file
 with open("expenses.json", "w", encoding="utf-8") as file:
     json.dump(data, file, ensure_ascii=False, indent=4)
 
 
 # --- 2. MAIN PROGRAM (MENU) ---
 while True:
-    print("\n--- EXPENSE TRACKER ---")
+    print(Fore.CYAN + "\n--- EXPENSE TRACKER ---")
     print(f"Month: {data['month']} | Current Budget: {data['budget']}€")
     print("1. Add new expense")
     print("2. View all expenses & total")
-    print("3. Calculate total expenses & remaining balance")
+    print("3. Calculate total expenses & balance")
     print("4. Bonus - Update budget")
-    print("5. Exit")
+    print("5. Category analysis & percentages (Bars)")
+    print("6. Exit")
     
-    choice = input("Choose an option (1-5): ")
+    choice = input("Select an option (1-6): ")
 
     if choice == "1":
         add(data)
@@ -65,9 +74,12 @@ while True:
         update_budget(data)
         with open("expenses.json", "w", encoding="utf-8") as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
-          
+
     elif choice == "5":
-        print("Exiting program. Goodbye!")
+        show_categories_percentage(data)
+          
+    elif choice == "6":
+        print(Fore.GREEN + "Exiting program. Goodbye!")
         break
     else:
-        print("Invalid choice. Please choose from 1 to 5.")
+        print(Fore.RED + "Invalid option. Choose between 1 and 6.")
