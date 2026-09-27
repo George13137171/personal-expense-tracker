@@ -1,43 +1,40 @@
 # 💰 Personal Expense Tracker
+A clean, lightweight, and interactive command-line Personal Expense Tracker built with Python, featuring a modular multi-file architecture, automated monthly state transitions, and colorful terminal visualizations.
 
-This project is a simple console application developed in Python for personal expense management. It was created as part of my second-year studies at the Athens University of Economics and Business (AUEB) 🎓. 
+✨ Current Features
+Modular Architecture: Clean separation of concerns with main.py handling the menu and flow control and fun.py managing the business logic and calculations.
 
-> 🚧 **Note:** This project is actively being developed and will be further expanded and improved with new features soon! 🚀
+Automatic Month Detection: Uses Python's datetime module to track month changes and automatically prompt for a fresh budget when a new month begins.
 
-## 🚀 Features
+Expense Management & History: Add new expenses with custom amounts and categories, and view a detailed history along with grand totals.
 
-* 📅 **Automatic Monthly Tracking**: Automatically detects month changes and prompts for a new monthly budget.
+Dynamic Budget Tracking: Input your monthly budget, instantly calculate your remaining balance, and update/boost your budget mid-month with automatic balance recalculation.
 
-* 💳 **Budget Management**: Allows you to set an initial budget and add extra amounts (such as bonuses or additional income).
+Category Analysis & Visual Bars: Automatically calculates percentages per category and renders vibrant, colorful progress bars directly in the terminal using Colorama.
 
-* 📝 **Expense Addition**: Easy recording of expenses by amount and category.
+Data Persistence: Automatically saves and loads your financial records locally using a structured JSON file (expenses.json).
 
-* 📊 **Display & Calculations**: View the complete list of expenses, cumulative totals, and remaining balance in real time.
+🚀 How to Run
+Make sure you have Python installed on your system.
 
-* 💾 **Data Persistence**: Automatic saving of data into a local JSON file (`expenses.json`).
+Clone the repository or download the source files (main.py and fun.py).
 
-## 📂 Project Structure
+Open your terminal or command prompt inside the project folder.
 
-* 🖥️ `main.py`: The main file that handles the interactive menu and the application loop.
+Install the required dependencies:
+pip install colorama
 
-* ⚙️ `fun.py`: The module containing the core logic functions (input handling, calculations, and display).
-
-## 📋 Prerequisites
-
-* 🐍 Python 3.x installed on your machine.
-
-## ⚡ Usage
-
-1. Clone this repository or download the files.
-
-2. Open your terminal in the project directory.
-
-3. Run the program using the following command:
-
-```bash
+Run the application using:
 python main.py
-```
 
-## 👨‍💻 Author
+Follow the on-screen menu prompts to manage your budget and expenses.
 
-Second-year student at AUEB (Athens University of Economics and Business).
+🛠️ Technologies Used
+Python (Core logic, file handling, control flow, functions, datetime)
+
+Colorama (Cross-platform terminal styling and colored progress bars)
+
+JSON (Structured local data storage and serialization)
+
+👤 Author
+Created by a 2nd-year Computer Science student at the Athens University of Economics and Business (AUEB).
